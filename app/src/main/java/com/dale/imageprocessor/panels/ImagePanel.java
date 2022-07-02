@@ -14,9 +14,22 @@ public class ImagePanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		
-		if(MyData.isLoaded) {
-			g.drawImage(MyData.loadedImage, 0, 0, 640, 360, this);
-		}
+		double ratio = 0.0;
+        int w = 0;
+        int h = 0;
+        if(MyData.loadedBufferedImage != null) {
+        	if(ImageProcessingFrame.image.getWidth()>ImageProcessingFrame.image.getHeight()) {
+                ratio = ((double)ImageProcessingFrame.WIDTH/2)/((double)ImageProcessingFrame.image.getWidth());
+                w = (int)(ImageProcessingFrame.image.getWidth() * ratio);
+                h = (int)(ImageProcessingFrame.image.getHeight() * ratio);
+             }else {
+                ratio = ((double)ImageProcessingFrame.HEIGHT-100)/((double)ImageProcessingFrame.image.getHeight());
+                w = (int)(ImageProcessingFrame.image.getWidth() * ratio);
+                h = (int)(ImageProcessingFrame.image.getHeight() * ratio);
+             }
+             Image resizeImage = ImageProcessingFrame.image.getScaledInstance(w, h, Image.SCALE_SMOOTH);      
+     		g.drawImage(resizeImage, 0, ((ImageProcessingFrame.HEIGHT-100)/2) - h/2, this);
+        }
+
 	}
 }
