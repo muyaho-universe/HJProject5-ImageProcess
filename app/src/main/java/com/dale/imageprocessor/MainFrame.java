@@ -1,8 +1,10 @@
 package com.dale.imageprocessor;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -16,6 +18,10 @@ import com.dale.imageprocessor.data.MyData;
 import com.dale.imageprocessor.panels.*;
 
 public class MainFrame extends JFrame {
+	private static final String TITLE = "ÀÌ¹ÌÁö ÆíÁı±â";
+	static int monitorWidth;
+	static int monitorHeight;
+	
 	JPanel mainPanel ;
 	JMenuBar menuBar;
 	JMenu menu;
@@ -29,41 +35,50 @@ public class MainFrame extends JFrame {
 		MainFrame mainFrame = new MainFrame();
 		mainFrame.run();
 	}
-	
+	MainFrame(){
+		super(TITLE);
+		Dimension resolution = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		monitorWidth = resolution.width;
+		monitorHeight = resolution.height;
+		
+		this.setSize(monitorWidth * 9 / 10, monitorHeight * 9 / 10);
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setResizable(false);
+	}
 	private void run() {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(null);
 		mainPanel.setBackground(Color.WHITE);
 		
 		menuBar = new JMenuBar();
-		menu = new JMenu("íŒŒì¼ ì„¤ì •");
-		fileLoader = new JMenuItem("íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°");
-		fileSaver = new JMenuItem("íŒŒì¼ ì €ì¥í•˜ê¸°");
+		menu = new JMenu("ÆÄÀÏ Å½»ö");
+		fileLoader = new JMenuItem("ÆÄÀÏ ¿­±â");
+		fileSaver = new JMenuItem("ÆÄÀÏ ÀúÀå");
 		
 		imagePanel = new ImagePanel();
-		imagePanel.setBounds(15, 150, 640, 360);
+		imagePanel.setBounds(15, 150, monitorWidth * 81 / 200 , monitorHeight * 81 / 200);
 		imagePanel.setBackground(Color.BLUE);
 		
 		edittedImagePanel = new EdittedImagePanel();
-		edittedImagePanel.setBounds(670, 150, 640, 360);
+		edittedImagePanel.setBounds(monitorWidth * 81 / 200 + 40, 150, monitorWidth * 81 / 200 , monitorHeight * 81 / 200);
 		edittedImagePanel.setBackground(Color.BLACK);
 		
 		fileLoader.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				chooser = new JFileChooser();
-				chooser.setFileFilter(new FileNameExtensionFilter("jpeg", "jpeg"));
 				chooser.addChoosableFileFilter(new FileNameExtensionFilter("png", "png"));
-				chooser.addChoosableFileFilter(new FileNameExtensionFilter("jpg", "jpg"));
+				chooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpg"));
 				
 				chooser.setMultiSelectionEnabled(false);
 				chooser.setVisible(true);
 				int result = chooser.showOpenDialog(MainFrame.this);
 				
 				if (result == JFileChooser.APPROVE_OPTION) {
-					//ì„ íƒí•œ íŒŒì¼ì˜ ê²½ë¡œ ë°˜í™˜
 					try {
-						MyData.loadedImage = ImageIO.read(chooser.getSelectedFile());
+						MyData.loadedBufferedImage = ImageIO.read(chooser.getSelectedFile());
 						MyData.isLoaded = true;
 						imagePanel.repaint();
 						edittedImagePanel.repaint();
@@ -72,7 +87,6 @@ public class MainFrame extends JFrame {
 						e1.printStackTrace();
 					}
 				    
-//				    ê²½ë¡œ ì¶œë ¥
 				    System.out.println(chooser.getSelectedFile());
 				}
 			}
@@ -91,10 +105,8 @@ public class MainFrame extends JFrame {
 				int result = chooser.showSaveDialog(MainFrame.this);
 				
 				if (result == JFileChooser.APPROVE_OPTION) {
-					//ì„ íƒí•œ íŒŒì¼ì˜ ê²½ë¡œ ë°˜í™˜
 				    File selectedFile = chooser.getSelectedFile();
 				    
-				    //ê²½ë¡œ ì¶œë ¥
 				    System.out.println(selectedFile);
 				}
 			}				
@@ -109,10 +121,7 @@ public class MainFrame extends JFrame {
 		mainPanel.add(edittedImagePanel);
 		
 		this.add(mainPanel);
-		this.setSize(1366, 768);
 		this.setVisible(true);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setResizable(false);
 	}
 
 }
