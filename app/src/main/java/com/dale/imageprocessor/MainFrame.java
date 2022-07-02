@@ -13,7 +13,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.dale.imageprocessor.data.MyData;
-import com.dale.imageprocessor.panels.ImagePanel;
+import com.dale.imageprocessor.panels.*;
 
 public class MainFrame extends JFrame {
 	JPanel mainPanel ;
@@ -23,6 +23,7 @@ public class MainFrame extends JFrame {
 	JMenuItem fileSaver;
 	JFileChooser chooser;
 	ImagePanel imagePanel;
+	EdittedImagePanel edittedImagePanel;
 	
 	public static void main(String[] args) {
 		MainFrame mainFrame = new MainFrame();
@@ -43,6 +44,10 @@ public class MainFrame extends JFrame {
 		imagePanel.setBounds(15, 150, 640, 360);
 		imagePanel.setBackground(Color.BLUE);
 		
+		edittedImagePanel = new EdittedImagePanel();
+		edittedImagePanel.setBounds(670, 150, 640, 360);
+		edittedImagePanel.setBackground(Color.BLACK);
+		
 		fileLoader.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -61,6 +66,7 @@ public class MainFrame extends JFrame {
 						MyData.loadedImage = ImageIO.read(chooser.getSelectedFile());
 						MyData.isLoaded = true;
 						imagePanel.repaint();
+						edittedImagePanel.repaint();
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -100,6 +106,7 @@ public class MainFrame extends JFrame {
 		this.setJMenuBar(menuBar);
 		
 		mainPanel.add(imagePanel);
+		mainPanel.add(edittedImagePanel);
 		
 		this.add(mainPanel);
 		this.setSize(1366, 768);
