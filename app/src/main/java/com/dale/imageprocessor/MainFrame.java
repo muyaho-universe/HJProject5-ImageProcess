@@ -12,8 +12,11 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.dale.imageprocessor.buttons.RoundButton;
 import com.dale.imageprocessor.data.MyData;
 import com.dale.imageprocessor.panels.*;
 
@@ -21,6 +24,8 @@ public class MainFrame extends JFrame {
 	private static final String TITLE = "이미지 편집기";
 	static int monitorWidth;
 	static int monitorHeight;
+	
+	private boolean isBrightControlPressed = false;
 	
 	JPanel mainPanel ;
 	JMenuBar menuBar;
@@ -32,6 +37,7 @@ public class MainFrame extends JFrame {
 	EdittedImagePanel edittedImagePanel;
 	ButtonPanel buttonPanel;
 	File loadedLoad;
+	JSlider slider = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
 	
 	public static void main(String[] args) {
 		MainFrame mainFrame = new MainFrame();
@@ -91,6 +97,22 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
+		buttonPanel.getBrightnessControl().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(isBrightControlPressed) {
+					isBrightControlPressed = false;
+					buttonPanel.getBrightnessControl().setColor("밝기 조절", new Color(61,205,91));
+					slider.setVisible(false);
+				}
+				else {
+					isBrightControlPressed = true;
+					buttonPanel.getBrightnessControl().setColor("밝기 조절", Color.GRAY);
+					slider.setVisible(true);
+				}
+			}
+		});
+		
 		imagePanel = new ImagePanel();
 		imagePanel.setBounds(15, 150, monitorWidth * 81 / 200 , monitorHeight * 81 / 200);
 		imagePanel.setBackground(Color.BLUE);
@@ -138,14 +160,74 @@ public class MainFrame extends JFrame {
 				chooser.setMultiSelectionEnabled(false);
 				chooser.setVisible(true);
 				int result = chooser.showSaveDialog(MainFrame.this);
-				
 				if (result == JFileChooser.APPROVE_OPTION) {
 				    File selectedFile = chooser.getSelectedFile();
-				    
 				    System.out.println(selectedFile);
 				}
 			}				
 		});
+		
+		slider.setBounds(150, 80, monitorWidth/2, 50);
+		slider.setPaintLabels(true);
+	    slider.setPaintTicks(true);
+	    slider.setPaintTrack(true);
+	    slider.setMajorTickSpacing(25);
+	    slider.setMinorTickSpacing(25);
+	    slider.setVisible(false);
+	    
+	    slider.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				for (int y = 0; y < MyData.loadedBufferedImage.getHeight(); y++) {
+		            for (int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
+
+		               int pixel = MyData.loadedBufferedImage.getRGB(x,y);
+		               Color color = new Color(pixel, true);
+		               
+		               int red = color.getRed();
+		               if(red+slider.getValue()>=255) {
+		            	   red = 255;
+		               }
+		               else if(red+slider.getValue()<=0) {
+		            	   red = 0;
+		               }
+		               else {
+		            	   red+= slider.getValue();
+		               }
+		               
+		               int green = color.getGreen();
+		               if(green+slider.getValue()>=255) {
+		            	   green = 255;
+		               }
+		               else if(green+slider.getValue()<=0) {
+		            	   green = 0;
+		               }
+		               else {
+		            	   green+=slider.getValue();
+		               }
+		               
+		               int blue = color.getBlue();
+		               if(blue+slider.getValue()>=255) {
+		            	   blue = 255;
+		               }
+		               else if(blue+slider.getValue()<=0) {
+		            	   blue = 0;
+		               }
+		               else {
+		            	   blue+=slider.getValue();
+		               }
+
+		               color = new Color(red, green, blue);
+		               //Setting new Color object to the image
+		               MyData.copiedImage.setRGB(x, y, color.getRGB());
+		               edittedImagePanel.repaint();
+		            }
+		         }
+		   }
+
+				
+			
+	    });
 		
 		menu.add(fileSaver);
 		menu.add(fileLoader);
@@ -155,6 +237,7 @@ public class MainFrame extends JFrame {
 		mainPanel.add(imagePanel);
 		mainPanel.add(edittedImagePanel);
 		
+		this.add(slider);
 		this.add(buttonPanel);
 		this.add(mainPanel);
 		this.setVisible(true);
