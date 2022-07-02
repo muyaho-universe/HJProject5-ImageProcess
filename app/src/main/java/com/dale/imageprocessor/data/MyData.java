@@ -1,5 +1,7 @@
 package com.dale.imageprocessor.data;
 
-public class MyData {
+import java.awt.Image;
 
+public class MyData {
+	public static Image loadedImage = null;
 }
