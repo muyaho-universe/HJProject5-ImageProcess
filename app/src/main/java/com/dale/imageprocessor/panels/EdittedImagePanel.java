@@ -18,17 +18,17 @@ public class EdittedImagePanel extends JPanel {
         int w = 0;
         int h = 0;
         if(MyData.isLoaded) {
-        	System.out.println(MyData.loadedBufferedImage.getWidth() + " " +MyData.loadedBufferedImage.getHeight());
-        	if(MyData.loadedBufferedImage.getWidth()<MyData.loadedBufferedImage.getHeight()) {
-        		ratio = ((double)EdittedImagePanel.this.getHeight())/((double)MyData.loadedBufferedImage.getHeight());
-                w = (int)(MyData.loadedBufferedImage.getWidth() * ratio);
-                h = (int)(MyData.loadedBufferedImage.getHeight() * ratio);
-                Image resizeImage = MyData.loadedBufferedImage.getScaledInstance(w, h, Image.SCALE_SMOOTH);  
-                g2.drawImage(resizeImage,MyData.loadedBufferedImage.getWidth()/2 - w/2,0,this);   
-                System.out.println(MyData.loadedBufferedImage.getWidth()/2 - w/2);
+        	System.out.println(MyData.copiedImage.getWidth() + " " +MyData.copiedImage.getHeight());
+        	if(MyData.copiedImage.getWidth()<MyData.copiedImage.getHeight()) {
+        		ratio = ((double)EdittedImagePanel.this.getHeight())/((double)MyData.copiedImage.getHeight());
+                w = (int)(MyData.copiedImage.getWidth() * ratio);
+                h = (int)(MyData.copiedImage.getHeight() * ratio);
+                Image resizeImage = MyData.copiedImage.getScaledInstance(w, h, Image.SCALE_SMOOTH);  
+                g2.drawImage(resizeImage,MyData.copiedImage.getWidth()/2 - w/2,0,this);   
+                System.out.println(MyData.copiedImage.getWidth()/2 - w/2);
             }
         	else {
-        		g2.drawImage(MyData.loadedBufferedImage, 0, 0, EdittedImagePanel.this.getWidth(), EdittedImagePanel.this.getHeight(), this);
+        		g2.drawImage(MyData.copiedImage, 0, 0, EdittedImagePanel.this.getWidth(), EdittedImagePanel.this.getHeight(), this);
         	}
         	    
         }

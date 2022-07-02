@@ -31,6 +31,7 @@ public class MainFrame extends JFrame {
 	ImagePanel imagePanel;
 	EdittedImagePanel edittedImagePanel;
 	ButtonPanel buttonPanel;
+	File loadedLoad;
 	
 	public static void main(String[] args) {
 		MainFrame mainFrame = new MainFrame();
@@ -69,10 +70,24 @@ public class MainFrame extends JFrame {
 					   for(int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
 					       Color colour = new Color(MyData.loadedBufferedImage.getRGB(x, y));
 					       int Y = (int) (0.2126 * colour.getRed() + 0.7152 * colour.getGreen() + 0.0722 * colour.getBlue());
-					       MyData.loadedBufferedImage.setRGB(x, y, new Color(Y, Y, Y).getRGB());
+					       MyData.copiedImage.setRGB(x, y, new Color(Y, Y, Y).getRGB());
 					   }
 				}
 				edittedImagePanel.repaint();
+			}
+		});
+		
+		buttonPanel.getGetOrigin().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					MyData.copiedImage = ImageIO.read(loadedLoad);
+					
+					edittedImagePanel.repaint();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -94,10 +109,12 @@ public class MainFrame extends JFrame {
 				chooser.setMultiSelectionEnabled(false);
 				chooser.setVisible(true);
 				int result = chooser.showOpenDialog(MainFrame.this);
-				
+				loadedLoad = chooser.getSelectedFile();
 				if (result == JFileChooser.APPROVE_OPTION) {
 					try {
 						MyData.loadedBufferedImage = ImageIO.read(chooser.getSelectedFile());
+						
+						MyData.copiedImage = MyData.loadedBufferedImage ;
 						MyData.isLoaded = true;
 						imagePanel.repaint();
 						edittedImagePanel.repaint();
