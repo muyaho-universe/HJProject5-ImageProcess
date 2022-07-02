@@ -26,7 +26,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.dale.imageprocessor.App'
+    mainClass = 'com.dale.imageprocessor.MainFrame'
 }
 
 tasks.named('test') {

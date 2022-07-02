@@ -4,4 +4,5 @@ import java.awt.Image;
 
 public class MyData {
 	public static Image loadedImage = null;
+	public static boolean isLoaded = false;
 }
