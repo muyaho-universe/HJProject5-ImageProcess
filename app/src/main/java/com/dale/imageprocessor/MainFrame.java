@@ -30,6 +30,7 @@ public class MainFrame extends JFrame {
 	JFileChooser chooser;
 	ImagePanel imagePanel;
 	EdittedImagePanel edittedImagePanel;
+	ButtonPanel buttonPanel;
 	
 	public static void main(String[] args) {
 		MainFrame mainFrame = new MainFrame();
@@ -56,6 +57,24 @@ public class MainFrame extends JFrame {
 		menu = new JMenu("파일 탐색");
 		fileLoader = new JMenuItem("파일 열기");
 		fileSaver = new JMenuItem("파일 저장");
+		
+		buttonPanel = new ButtonPanel();
+		buttonPanel.setBounds(15,15,monitorWidth * 81 / 100 , 130) ;
+		buttonPanel.setBackground(Color.WHITE);
+		
+		buttonPanel.getGrayScale().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int y = 0; y < MyData.loadedBufferedImage.getHeight(); y++) {
+					   for(int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
+					       Color colour = new Color(MyData.loadedBufferedImage.getRGB(x, y));
+					       int Y = (int) (0.2126 * colour.getRed() + 0.7152 * colour.getGreen() + 0.0722 * colour.getBlue());
+					       MyData.loadedBufferedImage.setRGB(x, y, new Color(Y, Y, Y).getRGB());
+					   }
+				}
+				edittedImagePanel.repaint();
+			}
+		});
 		
 		imagePanel = new ImagePanel();
 		imagePanel.setBounds(15, 150, monitorWidth * 81 / 200 , monitorHeight * 81 / 200);
@@ -86,7 +105,6 @@ public class MainFrame extends JFrame {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				    
 				    System.out.println(chooser.getSelectedFile());
 				}
 			}
@@ -120,6 +138,7 @@ public class MainFrame extends JFrame {
 		mainPanel.add(imagePanel);
 		mainPanel.add(edittedImagePanel);
 		
+		this.add(buttonPanel);
 		this.add(mainPanel);
 		this.setVisible(true);
 	}
