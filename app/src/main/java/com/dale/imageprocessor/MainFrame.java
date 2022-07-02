@@ -21,7 +21,7 @@ import com.dale.imageprocessor.data.MyData;
 import com.dale.imageprocessor.panels.*;
 
 public class MainFrame extends JFrame {
-	private static final String TITLE = "ÀÌ¹ÌÁö ÆíÁý±â";
+	private static final String TITLE = "ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
 	static int monitorWidth;
 	static int monitorHeight;
 	
@@ -61,9 +61,9 @@ public class MainFrame extends JFrame {
 		mainPanel.setBackground(Color.WHITE);
 		
 		menuBar = new JMenuBar();
-		menu = new JMenu("ÆÄÀÏ Å½»ö");
-		fileLoader = new JMenuItem("ÆÄÀÏ ¿­±â");
-		fileSaver = new JMenuItem("ÆÄÀÏ ÀúÀå");
+		menu = new JMenu("ï¿½ï¿½ï¿½ï¿½ Å½ï¿½ï¿½");
+		fileLoader = new JMenuItem("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
+		fileSaver = new JMenuItem("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 		
 		buttonPanel = new ButtonPanel();
 		buttonPanel.setBounds(15,15,monitorWidth * 81 / 100 , 130) ;
@@ -102,12 +102,12 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(isBrightControlPressed) {
 					isBrightControlPressed = false;
-					buttonPanel.getBrightnessControl().setColor("¹à±â Á¶Àý", new Color(61,205,91));
+					buttonPanel.getBrightnessControl().setColor("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", new Color(61,205,91));
 					slider.setVisible(false);
 				}
 				else {
 					isBrightControlPressed = true;
-					buttonPanel.getBrightnessControl().setColor("¹à±â Á¶Àý", Color.GRAY);
+					buttonPanel.getBrightnessControl().setColor("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½", Color.GRAY);
 					slider.setVisible(true);
 				}
 			}
@@ -136,7 +136,7 @@ public class MainFrame extends JFrame {
 					try {
 						MyData.loadedBufferedImage = ImageIO.read(chooser.getSelectedFile());
 						
-						MyData.copiedImage = MyData.loadedBufferedImage ;
+						MyData.copiedImage = ImageIO.read(chooser.getSelectedFile());
 						MyData.isLoaded = true;
 						imagePanel.repaint();
 						edittedImagePanel.repaint();
