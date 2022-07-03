@@ -11,7 +11,7 @@ public class ButtonPanel extends JPanel {
 	private Font normalFont = new Font("",Font.BOLD, 30);
 	
 	private RoundButton grayScale = new RoundButton("흑백만들기");
-	private RoundButton zoomInZoomOut = new RoundButton("확대/축소");
+	private RoundButton invert = new RoundButton("색 반전");
 	private RoundButton brightnessControl = new RoundButton("밝기조절");
 	private RoundButton getEdge = new RoundButton("테두리 추출");
 	private RoundButton getOrigin = new RoundButton("원본 보기");
@@ -19,13 +19,13 @@ public class ButtonPanel extends JPanel {
 	public ButtonPanel() {
 		setLayout(new FlowLayout());
 		grayScale.setFont(normalFont);
-		zoomInZoomOut.setFont(normalFont);
+		invert.setFont(normalFont);
 		brightnessControl.setFont(normalFont);
 		getEdge.setFont(normalFont);
 		getOrigin.setFont(normalFont);
 		
 		add(grayScale);
-		add(zoomInZoomOut);
+		add(invert);
 		add(brightnessControl);
 		add(getEdge);
 		add(getOrigin);
@@ -37,11 +37,11 @@ public class ButtonPanel extends JPanel {
 	public void setGrayScale(RoundButton grayScale) {
 		this.grayScale = grayScale;
 	}
-	public RoundButton getZoomInZoomOut() {
-		return zoomInZoomOut;
+	public RoundButton getInvert() {
+		return invert;
 	}
-	public void setZoomInZoomOut(RoundButton zoomInZoomOut) {
-		this.zoomInZoomOut = zoomInZoomOut;
+	public void setInvert(RoundButton invert) {
+		this.invert = invert;
 	}
 	public RoundButton getBrightnessControl() {
 		return brightnessControl;

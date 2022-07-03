@@ -1,8 +1,11 @@
 package com.dale.imageprocessor.panels;
 
+import java.awt.AWTException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Robot;
 
 import javax.swing.JPanel;
 
@@ -30,10 +33,8 @@ public class EdittedImagePanel extends JPanel {
         	else {
         		g2.drawImage(MyData.copiedImage, 0, 0, EdittedImagePanel.this.getWidth(), EdittedImagePanel.this.getHeight(), this);
         	}
-        	    
-        }
-
+        	
+      }
+      
 	}
-	
-
 }

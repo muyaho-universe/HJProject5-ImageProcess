@@ -1,12 +1,16 @@
 package com.dale.imageprocessor;
 
+import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -113,6 +117,22 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
+		buttonPanel.getInvert().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				for(int y = 0; y < MyData.loadedBufferedImage.getHeight(); y++) {
+					   for(int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
+					       Color colour = new Color(MyData.loadedBufferedImage.getRGB(x, y));
+					       int red = 255 - colour.getRed();
+					       int green = 255 - colour.getGreen();
+					       int blue = 255 - colour.getBlue();
+					       MyData.copiedImage.setRGB(x, y, new Color(red, green, blue).getRGB());
+					   }
+				}
+				edittedImagePanel.repaint();
+			}
+		});
+		
 		imagePanel = new ImagePanel();
 		imagePanel.setBounds(15, 150, monitorWidth * 81 / 200 , monitorHeight * 81 / 200);
 		imagePanel.setBackground(Color.BLUE);
@@ -152,17 +172,41 @@ public class MainFrame extends JFrame {
 		fileSaver.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					MyData.saveImage = new Robot().createScreenCapture(new Rectangle(edittedImagePanel.getLocationOnScreen().x, edittedImagePanel.getLocationOnScreen().y,edittedImagePanel.getWidth(), edittedImagePanel.getHeight()));
+			      } catch (AWTException e1) {
+					e1.printStackTrace();
+			      } 
 				chooser = new JFileChooser();
-				chooser.setFileFilter(new FileNameExtensionFilter("jpeg", "jpeg"));
 				chooser.addChoosableFileFilter(new FileNameExtensionFilter("png", "png"));
-				chooser.addChoosableFileFilter(new FileNameExtensionFilter("jpg", "jpg"));
+				chooser.setFileFilter(new FileNameExtensionFilter("jpg", "jpg"));
 				
 				chooser.setMultiSelectionEnabled(false);
 				chooser.setVisible(true);
 				int result = chooser.showSaveDialog(MainFrame.this);
 				if (result == JFileChooser.APPROVE_OPTION) {
-				    File selectedFile = chooser.getSelectedFile();
-				    System.out.println(selectedFile);
+					
+					if(chooser.getFileFilter().toString().contains(".png")) {
+						String fileName = chooser.getSelectedFile().getPath() + ".png";
+						File pngFile = new File(fileName);
+						try {
+							ImageIO.write(MyData.saveImage, "png", pngFile);
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+					else {
+						String fileName = chooser.getSelectedFile().getPath() + ".jpg";
+						File imgFile = new File(fileName);
+						
+						try {
+							ImageIO.write(MyData.saveImage, "jpg", imgFile);
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+					}
+					
+					
 				}
 			}				
 		});
