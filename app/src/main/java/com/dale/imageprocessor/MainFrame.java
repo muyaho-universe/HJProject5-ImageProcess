@@ -45,7 +45,7 @@ public class MainFrame extends JFrame {
 	ButtonPanel buttonPanel;
 	File loadedLoad;
 	JSlider slider = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
-	JSlider contrastSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+	JSlider contrastSlider = new JSlider(JSlider.HORIZONTAL, 0, 50, 0);
 	
 //	float brightenFactor = 2f;
 	
@@ -84,9 +84,10 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				for(int y = 0; y < MyData.loadedBufferedImage.getHeight(); y++) {
 					   for(int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
-					       Color colour = new Color(MyData.loadedBufferedImage.getRGB(x, y));
+					       Color colour = new Color(MyData.copiedImage.getRGB(x, y));
 					       int Y = (int) (0.2126 * colour.getRed() + 0.7152 * colour.getGreen() + 0.0722 * colour.getBlue());
 					       MyData.copiedImage.setRGB(x, y, new Color(Y, Y, Y).getRGB());
+					       MyData.loadedBufferedImage.setRGB(x, y, new Color(Y, Y, Y).getRGB());
 					   }
 				}
 				edittedImagePanel.repaint();
@@ -97,6 +98,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
+					 MyData.loadedBufferedImage = ImageIO.read(loadedLoad);
 					MyData.copiedImage = ImageIO.read(loadedLoad);
 					
 					edittedImagePanel.repaint();
@@ -150,6 +152,7 @@ public class MainFrame extends JFrame {
 					       int green = 255 - colour.getGreen();
 					       int blue = 255 - colour.getBlue();
 					       MyData.copiedImage.setRGB(x, y, new Color(red, green, blue).getRGB());
+					       MyData.loadedBufferedImage.setRGB(x, y, new Color(red, green, blue).getRGB());
 					   }
 				}
 				edittedImagePanel.repaint();
@@ -228,8 +231,6 @@ public class MainFrame extends JFrame {
 							e1.printStackTrace();
 						}
 					}
-					
-					
 				}
 			}				
 		});
@@ -247,7 +248,7 @@ public class MainFrame extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				for (int y = 0; y < MyData.loadedBufferedImage.getHeight(); y++) {
 		            for (int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
-
+		            	
 		               int pixel = MyData.loadedBufferedImage.getRGB(x,y);
 		               Color color = new Color(pixel, true);
 		               
@@ -283,7 +284,7 @@ public class MainFrame extends JFrame {
 		               else {
 		            	   blue+=slider.getValue();
 		               }
-
+		               
 		               color = new Color(red, green, blue);
 		               //Setting new Color object to the image
 		               MyData.copiedImage.setRGB(x, y, color.getRGB());
@@ -304,29 +305,6 @@ public class MainFrame extends JFrame {
 	    contrastSlider.addChangeListener(new ChangeListener() { //
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				for (int y = 0; y < MyData.loadedBufferedImage.getHeight(); y++) {
-		            for (int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
-		            	int pixel = MyData.loadedBufferedImage.getRGB(x,y);
-		            	int c = 0;
-			            Color color = new Color(pixel, true);
-			            int red = color.getRed();
-			            int green = color.getGreen();
-			            int blue = color.getBlue();
-			            if(contrastSlider.getValue()>0) {
-			            	c = 100/(100-contrastSlider.getValue());
-			            }
-			            else {
-			            	c = (100+contrastSlider.getValue())/100;
-			            }
-			            red = 128+ c*(red - 128);
-			            green = 128+ c*(green - 128);
-			            blue = 128+ c*(blue - 128);
-			            color = new Color(red, green, blue);
-		                //Setting new Color object to the image
-		                MyData.copiedImage.setRGB(x, y, color.getRGB());
-		                edittedImagePanel.repaint();
-		            }
-				}
 				Float brightenFactor = (float) (contrastSlider.getValue() *0.1);
 				RescaleOp op = new RescaleOp(brightenFactor, 0, null);
 				MyData.copiedImage = op.filter(MyData.loadedBufferedImage, null);

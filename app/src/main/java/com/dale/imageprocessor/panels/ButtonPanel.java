@@ -13,7 +13,7 @@ public class ButtonPanel extends JPanel {
 	private RoundButton grayScale = new RoundButton("흑백만들기");
 	private RoundButton invert = new RoundButton("색 반전");
 	private RoundButton brightnessControl = new RoundButton("밝기조절");
-	private RoundButton getEdge = new RoundButton("테두리 추출");
+//	private RoundButton getEdge = new RoundButton("테두리 추출");
 	private RoundButton contrast = new RoundButton("밝기 대비");
 	private RoundButton getOrigin = new RoundButton("원본 보기");
 	
@@ -22,14 +22,14 @@ public class ButtonPanel extends JPanel {
 		grayScale.setFont(normalFont);
 		invert.setFont(normalFont);
 		brightnessControl.setFont(normalFont);
-		getEdge.setFont(normalFont);
+//		getEdge.setFont(normalFont);
 		contrast.setFont(normalFont);
 		getOrigin.setFont(normalFont);
 		
 		add(grayScale);
 		add(invert);
 		add(brightnessControl);
-		add(getEdge);
+//		add(getEdge);
 		add(contrast);
 		add(getOrigin);
 	}
@@ -52,12 +52,12 @@ public class ButtonPanel extends JPanel {
 	public void setBrightnessControl(RoundButton brightnessControl) {
 		this.brightnessControl = brightnessControl;
 	}
-	public RoundButton getGetEdge() {
-		return getEdge;
-	}
-	public void setGetEdge(RoundButton getEdge) {
-		this.getEdge = getEdge;
-	}
+//	public RoundButton getGetEdge() {
+//		return getEdge;
+//	}
+//	public void setGetEdge(RoundButton getEdge) {
+//		this.getEdge = getEdge;
+//	}
 	
 	public RoundButton getGetOrigin() {
 		return getOrigin;
