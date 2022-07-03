@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.IOException;
 
@@ -44,7 +45,9 @@ public class MainFrame extends JFrame {
 	ButtonPanel buttonPanel;
 	File loadedLoad;
 	JSlider slider = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
-	JSlider contrastSlider = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
+	JSlider contrastSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+	
+//	float brightenFactor = 2f;
 	
 	public static void main(String[] args) {
 		MainFrame mainFrame = new MainFrame();
@@ -123,15 +126,16 @@ public class MainFrame extends JFrame {
 		buttonPanel.getContrast().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				if(isContrastControlPressed) {
 					isContrastControlPressed = false;
-					buttonPanel.getBrightnessControl().setColor("¹à±â ´ëºñ", new Color(61,205,91));
-					slider.setVisible(false);
+					buttonPanel.getContrast().setColor("¹à±â ´ëºñ", new Color(61,205,91));
+					contrastSlider.setVisible(false);
 				}
 				else {
 					isContrastControlPressed = true;
-					buttonPanel.getBrightnessControl().setColor("¹à±â ´ëºñ", Color.GRAY);
-					slider.setVisible(true);
+					buttonPanel.getContrast().setColor("¹à±â ´ëºñ", Color.GRAY);
+					contrastSlider.setVisible(true);
 				}
 			}
 		});
@@ -287,9 +291,47 @@ public class MainFrame extends JFrame {
 		            }
 		         }
 		   }
-
-				
-			
+	    });
+	    
+	    contrastSlider.setBounds(200, 80, monitorWidth/2, 50);
+	    contrastSlider.setPaintLabels(true);
+	    contrastSlider.setPaintTicks(true);
+	    contrastSlider.setPaintTrack(true);
+	    contrastSlider.setMajorTickSpacing(10);
+	    contrastSlider.setMinorTickSpacing(10);
+	    contrastSlider.setVisible(false);
+	    
+	    contrastSlider.addChangeListener(new ChangeListener() { //
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				for (int y = 0; y < MyData.loadedBufferedImage.getHeight(); y++) {
+		            for (int x = 0; x < MyData.loadedBufferedImage.getWidth(); x++) {
+		            	int pixel = MyData.loadedBufferedImage.getRGB(x,y);
+		            	int c = 0;
+			            Color color = new Color(pixel, true);
+			            int red = color.getRed();
+			            int green = color.getGreen();
+			            int blue = color.getBlue();
+			            if(contrastSlider.getValue()>0) {
+			            	c = 100/(100-contrastSlider.getValue());
+			            }
+			            else {
+			            	c = (100+contrastSlider.getValue())/100;
+			            }
+			            red = 128+ c*(red - 128);
+			            green = 128+ c*(green - 128);
+			            blue = 128+ c*(blue - 128);
+			            color = new Color(red, green, blue);
+		                //Setting new Color object to the image
+		                MyData.copiedImage.setRGB(x, y, color.getRGB());
+		                edittedImagePanel.repaint();
+		            }
+				}
+				Float brightenFactor = (float) (contrastSlider.getValue() *0.1);
+				RescaleOp op = new RescaleOp(brightenFactor, 0, null);
+				MyData.copiedImage = op.filter(MyData.loadedBufferedImage, null);
+				edittedImagePanel.repaint();			
+			}
 	    });
 		
 		menu.add(fileSaver);
@@ -300,6 +342,7 @@ public class MainFrame extends JFrame {
 		mainPanel.add(imagePanel);
 		mainPanel.add(edittedImagePanel);
 		
+		this.add(contrastSlider);
 		this.add(slider);
 		this.add(buttonPanel);
 		this.add(mainPanel);
