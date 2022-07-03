@@ -24,12 +24,14 @@ import com.dale.imageprocessor.buttons.RoundButton;
 import com.dale.imageprocessor.data.MyData;
 import com.dale.imageprocessor.panels.*;
 
+
 public class MainFrame extends JFrame {
 	private static final String TITLE = "이미지 편집기";
 	static int monitorWidth;
 	static int monitorHeight;
 	
 	private boolean isBrightControlPressed = false;
+	private boolean isContrastControlPressed = false;
 	
 	JPanel mainPanel ;
 	JMenuBar menuBar;
@@ -42,6 +44,7 @@ public class MainFrame extends JFrame {
 	ButtonPanel buttonPanel;
 	File loadedLoad;
 	JSlider slider = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
+	JSlider contrastSlider = new JSlider(JSlider.HORIZONTAL, -255, 255, 0);
 	
 	public static void main(String[] args) {
 		MainFrame mainFrame = new MainFrame();
@@ -112,6 +115,22 @@ public class MainFrame extends JFrame {
 				else {
 					isBrightControlPressed = true;
 					buttonPanel.getBrightnessControl().setColor("밝기조절", Color.GRAY);
+					slider.setVisible(true);
+				}
+			}
+		});
+		
+		buttonPanel.getContrast().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(isContrastControlPressed) {
+					isContrastControlPressed = false;
+					buttonPanel.getBrightnessControl().setColor("밝기 대비", new Color(61,205,91));
+					slider.setVisible(false);
+				}
+				else {
+					isContrastControlPressed = true;
+					buttonPanel.getBrightnessControl().setColor("밝기 대비", Color.GRAY);
 					slider.setVisible(true);
 				}
 			}
